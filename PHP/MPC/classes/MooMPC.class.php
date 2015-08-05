@@ -221,9 +221,13 @@
 		 *
 		 * 根据task设置的任务启动子进程
 		 *
+		 * @param  callabled 函数或方法
+		 *         可以使用匿名函数 >> function() use() {}
+		 *         父进程创建完成子进程后执行
+		 *
 		 * @return void
 		 */
-		public function exec()
+		public function exec($fun = NULL)
 		{
 			if (empty($this->called))
 			{
@@ -244,7 +248,11 @@
 				{
 					break;
 				}
-			}//~: ___END_FOREACH_____
+			}
+			if ($flag && !empty($fun) && is_callable($fun))
+			{
+				$fun();
+			}
 		}
 		
 		/**
