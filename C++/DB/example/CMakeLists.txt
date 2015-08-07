@@ -1,0 +1,5 @@
+include_directories (${PROJECT_SOURCE_DIR}/classes/inc /usr/local/mysql/include/mysql)
+link_directories (${PROJECT_BINARY_DIR}/lib/ /usr/local/mysql/lib)
+link_libraries (mysqlclient pthread m dl dbutil)
+set (CMAKE_CXX_FLAGS -std=c++11)
+add_executable (demo main.cpp)
