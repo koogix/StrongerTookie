@@ -224,13 +224,25 @@ private:
 
 #ifndef DB_NO_NAMESPACE_KOOGIX
 } //~: namespace koogix
+
+typedef koogix::db::Connection                DBMY_CON_T;
+typedef koogix::db::Connection::Result        DBMY_RES_T;
+typedef koogix::db::Connection::Result::Row   DBMY_ROW_T;
+
+#else //~: no namespace koogix
+
+typedef db::Connection               DBMY_CON_T;
+typedef db::Connection::Result       DBMY_RES_T;
+typedef db::Connection::Result::Row  DBMY_ROW_T;
+
 #endif /* DB_NO_NAMESPACE_KOOGIX */
 
-typedef koogix::db::Connection                                DBMY_CON_T;
-typedef koogix::db::Connection::Result                        DBMY_RES_T;
-typedef koogix::db::Connection::Result::Row                   DBMY_ROW_T;
-typedef std::shared_ptr<koogix::db::Connection>               DBMY_CON_T_PTR;
-typedef std::shared_ptr<koogix::db::Connection::Result>       DBMY_RES_T_PTR;
-typedef std::shared_ptr<koogix::db::Connection::Result::Row>  DBMY_ROW_T_PTR;
+/**
+ * shared ponters
+ *
+ */
+typedef std::shared_ptr<DBMY_CON_T>  DBMY_CON_T_PTR;
+typedef std::shared_ptr<DBMY_RES_T>  DBMY_RES_T_PTR;
+typedef std::shared_ptr<DBMY_ROW_T>  DBMY_ROW_T_PTR;
 
 #endif /* __KOOGIX_DB_MYSQLCOMMON_H__ */
