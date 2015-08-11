@@ -38,11 +38,11 @@ std::string Connection::Result::Row::field(unsigned int index)
 {
 	if (_empty_flag)
 	{
-		return NULL;
+		return std::string();
 	}
 	if (index >= _res->_field_num)
 	{
-		return NULL;
+		return std::string();
 	}
 	return _row[index];
 }
@@ -53,7 +53,7 @@ std::string Connection::Result::Row::field(std::string name)
 	it = _res->_field_map.find(name);
 	if (it == _res->_field_map.end())
 	{
-		return NULL;
+		return std::string();
 	}
 	return field(it->second);
 }

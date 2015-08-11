@@ -38,18 +38,21 @@ public:
 		Result();
 		virtual ~Result();
 		bool isEmpty();
+		bool isError();
+		std::string strError();
 	private:
-		void * _reply;
+		redisReply * _reply;
+		redisContext * _con;
 	};
 	friend Result;
 public:
-	Redis(std::string host, unsigned int port);
+	Redis(std::string host, unsigned int port, unsigned int database = 0, std::string passwd = "");
 	virtual ~Redis();
-	std::shared_ptr<Result> query(std::string format, ...);
+	std::shared_ptr<Result> command(std::string format, ...);
 	bool isError();
 	std::string strError();
 private:
-	redisContext* _context;
+	redisContext * _context;
 };
 
 /* ~ db-ENDED ~ */

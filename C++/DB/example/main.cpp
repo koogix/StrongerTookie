@@ -17,7 +17,15 @@ int main(int argc, char** argv)
 		std::cout << row["id"] << " " << row[1] << std::endl;
 	}
 	DBRD_CON_T_PTR redcon = std::make_shared<DBRD_CON_T>("127.0.0.1", 6379);
-	DBRD_RES_T_PTR buffer = redcon->query("SET a 1");
-
+	if (redcon->isError())
+	{
+		std::cout << "REDIS-CON-ERROR: " << redcon->strError() << std::endl;
+	}
+	DBRD_RES_T_PTR buffer = redcon->command("ZADD ranking %d %s", "123", "aa");
+	if (buffer->isError())
+	{
+		std::cout << "REDIS-RES-ERROR: " << buffer->strError() << std::endl;
+	}
+	
 	return 0;
 }
