@@ -24,14 +24,19 @@ bool Connection::Result::Row::isEmpty()
 	return _empty_flag;
 }
 
-std::string Connection::Result::Row::operator[] (unsigned int index)
+std::string Connection::Result::Row::operator [] (unsigned int index)
 {
 	return field(index);
 }
 
-std::string Connection::Result::Row::operator[] (std::string name)
+std::string Connection::Result::Row::operator [] (const char* name)
 {
 	return field(name);
+}
+
+Connection::Result::Row::operator bool() const
+{
+	return !_empty_flag;
 }
 
 std::string Connection::Result::Row::field(unsigned int index)

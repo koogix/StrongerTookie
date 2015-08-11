@@ -1,6 +1,7 @@
 #ifndef __KOOGIX_DB_REDISCOMMON_H__
 #define __KOOGIX_DB_REDISCOMMON_H__
 
+#if _USE_REDIS
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -79,4 +80,5 @@ typedef db::Redis::Result  DBRD_RES_T;
 typedef std::shared_ptr<DBRD_CON_T>  DBRD_CON_T_PTR;
 typedef std::shared_ptr<DBRD_RES_T>  DBRD_RES_T_PTR;
 
+#endif
 #endif /* __KOOGIX_DB_REDISCOMMON_H__ */

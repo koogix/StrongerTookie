@@ -12,10 +12,11 @@ int main(int argc, char** argv)
 	DBMY_RES_T_PTR result = conn->query("SELECT * FROM `table`");
 	if (result->isError()) std::cout << result->strError() << std::endl;
 	
-	for (DBMY_ROW_T row = result->fetch(); !row.isEmpty(); )
+	while (DBMY_ROW_T row = result->fetch())
 	{
 		std::cout << row["id"] << " " << row[1] << std::endl;
 	}
+	#if _USE_REDIS
 	DBRD_CON_T_PTR redcon = std::make_shared<DBRD_CON_T>("127.0.0.1", 6379);
 	if (redcon->isError())
 	{
@@ -26,6 +27,6 @@ int main(int argc, char** argv)
 	{
 		std::cout << "REDIS-RES-ERROR: " << buffer->strError() << std::endl;
 	}
-	
+	#endif
 	return 0;
 }

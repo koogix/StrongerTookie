@@ -2,6 +2,8 @@
 #include <cstdarg>
 #include "rediscommon.h"
 
+#if _USE_REDIS
+
 #ifndef DB_NO_NAMESPACE_KOOGIX
 using namespace koogix::db;
 #else
@@ -111,3 +113,4 @@ std::string Redis::Result::strError()
 	return _reply->str;
 }
 
+#endif

@@ -1,4 +1,5 @@
 set (CMAKE_CXX_FLAGS -std=c++11)
+
 include_directories (
 	${MYSQL_INC_DIR}
 	${REDIS_INC_DIR}

@@ -104,8 +104,9 @@ public:
 		public:
 			Row(std::shared_ptr<Result> res, MYSQL_ROW row);
 			virtual ~Row();
-			std::string operator[] (unsigned int index);
-			std::string operator[] (std::string name);
+			std::string operator [] (unsigned int index);
+			std::string operator [] (const char* name);
+			operator bool() const;
 			std::string field(unsigned int index);
 			std::string field(std::string name);
 			bool isEmpty();
