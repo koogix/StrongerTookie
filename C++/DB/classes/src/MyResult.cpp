@@ -7,7 +7,7 @@ using namespace db;
 #endif /* DB_NO_NAMESPACE_KOOGIX */
 
 Connection::Result::Result(std::shared_ptr<Connection> conn, MYSQL_RES * res)
-	: _conn   (conn)
+	: _conn   (std::ref(conn))
 	, _result (res)
 	, _error_flag (res == NULL)
 	, _field_num  (0)
@@ -46,6 +46,7 @@ std::string Connection::Result::strError()
 Connection::Result::Row Connection::Result::fetch()
 {
 	MYSQL_ROW row = NULL;
+	
 	if (_result != NULL)
 	{
 		row = mysql_fetch_row(_result);

@@ -7,21 +7,37 @@ using namespace db;
 #endif /* DB_NO_NAMESPACE_KOOGIX */
 
 Connection::Result::Row::Row(std::shared_ptr<Result> res, MYSQL_ROW row)
-	: _res (res)
+	: _res (std::ref(res))
 	, _row (row)
 	, _empty_flag (row == NULL)
 {
-	
+}
+
+Connection::Result::Row::Row()
+	: _res (nullptr)
+	, _row (NULL)
+	, _empty_flag (true)
+{
 }
 
 Connection::Result::Row::~Row()
 {
-	
 }
 
-bool Connection::Result::Row::isEmpty()
+Connection::Result::Row::operator bool() const
 {
-	return _empty_flag;
+	return !_empty_flag;
+}
+
+Connection::Result::Row& Connection::Result::Row::operator++ ()
+{
+	_row = mysql_fetch_row(_res->_result);
+	
+	if (_row == NULL)
+	{
+		_empty_flag = true;
+	}
+	return (*this);
 }
 
 std::string Connection::Result::Row::operator[] (unsigned int index)
@@ -29,9 +45,14 @@ std::string Connection::Result::Row::operator[] (unsigned int index)
 	return field(index);
 }
 
-std::string Connection::Result::Row::operator[] (std::string name)
+std::string Connection::Result::Row::operator[] (const char* name)
 {
 	return field(name);
+}
+
+bool Connection::Result::Row::isEmpty()
+{
+	return _empty_flag;
 }
 
 std::string Connection::Result::Row::field(unsigned int index)
