@@ -1,0 +1,6 @@
+/* use mysql */
+#cmakedefine USE_MYSQL
+
+/* use redis */
+#cmakedefine USE_REDIS
+

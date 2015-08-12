@@ -1,12 +1,12 @@
 set (CMAKE_CXX_FLAGS -std=c++11)
-include_directories (
-	${MYSQL_INC_DIR}
-	${REDIS_INC_DIR}
-	inc
-)
-link_directories (
-	${MYSQL_LIB_DIR}
-	${REDIS_LIB_DIR}
-)
+include_directories ( inc )
 aux_source_directory (src SOURCE_LIB)
 add_library (dbutil STATIC ${SOURCE_LIB})
+
+#if (USE_MYSQL)
+#	set (DB_SRC_MYSQL "src/MyLibrary.cpp;src/MyConnection.cpp;src/MyResult.cpp;src/MyRow.cpp")
+#endif (USE_MYSQL)
+#if (USE_REDIS)
+#	set (DB_SRC_REDIS "src/RedisCon.cpp")
+#endif (USE_REDIS)
+#add_library (dbutil STATIC "${DB_SRC_MYSQL};${USE_REDIS}")
