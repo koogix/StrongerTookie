@@ -1,0 +1,48 @@
+Determining if files mysql.h exist failed with the following output:
+Change Dir: /repo/StrongerTookie/C++/DB/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/gmake "cmTryCompileExec3599814859/fast"
+/usr/bin/gmake -f CMakeFiles/cmTryCompileExec3599814859.dir/build.make CMakeFiles/cmTryCompileExec3599814859.dir/build
+gmake[1]: Entering directory `/repo/StrongerTookie/C++/DB/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /repo/StrongerTookie/C++/DB/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3599814859.dir/CheckIncludeFiles.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec3599814859.dir/CheckIncludeFiles.c.o   -c /repo/StrongerTookie/C++/DB/build/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/repo/StrongerTookie/C++/DB/build/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:2:19: fatal error: mysql.h: No such file or directory
+ #include <mysql.h>
+                   ^
+compilation terminated.
+gmake[1]: Leaving directory `/repo/StrongerTookie/C++/DB/build/CMakeFiles/CMakeTmp'
+gmake[1]: *** [CMakeFiles/cmTryCompileExec3599814859.dir/CheckIncludeFiles.c.o] Error 1
+gmake: *** [cmTryCompileExec3599814859/fast] Error 2
+
+Source:
+/* */
+#include <mysql.h>
+
+
+int main(){return 0;}
+
+Determining if files hiredis.h exist failed with the following output:
+Change Dir: /repo/StrongerTookie/C++/DB/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/gmake "cmTryCompileExec3015691477/fast"
+/usr/bin/gmake -f CMakeFiles/cmTryCompileExec3015691477.dir/build.make CMakeFiles/cmTryCompileExec3015691477.dir/build
+gmake[1]: Entering directory `/repo/StrongerTookie/C++/DB/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /repo/StrongerTookie/C++/DB/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3015691477.dir/CheckIncludeFiles.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec3015691477.dir/CheckIncludeFiles.c.o   -c /repo/StrongerTookie/C++/DB/build/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/repo/StrongerTookie/C++/DB/build/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:2:21: fatal error: hiredis.h: No such file or directory
+ #include <hiredis.h>
+                     ^
+compilation terminated.
+gmake[1]: Leaving directory `/repo/StrongerTookie/C++/DB/build/CMakeFiles/CMakeTmp'
+gmake[1]: *** [CMakeFiles/cmTryCompileExec3015691477.dir/CheckIncludeFiles.c.o] Error 1
+gmake: *** [cmTryCompileExec3015691477/fast] Error 2
+
+Source:
+/* */
+#include <hiredis.h>
+
+
+int main(){return 0;}
+

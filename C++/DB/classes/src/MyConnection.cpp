@@ -1,4 +1,3 @@
-#include <iostream>
 #include "mysqlcommon.h"
 
 #ifndef DB_NO_NAMESPACE_KOOGIX
