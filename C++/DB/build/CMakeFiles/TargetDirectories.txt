@@ -1,2 +1,0 @@
-/repo/StrongerTookie/C++/DB/build/lib/CMakeFiles/dbutil.dir
-/repo/StrongerTookie/C++/DB/build/bin/CMakeFiles/demo.dir

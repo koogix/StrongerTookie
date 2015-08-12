@@ -1,2 +1,0 @@
-/usr/bin/ar cr libdbutil.a  CMakeFiles/dbutil.dir/src/MyRow.cpp.o CMakeFiles/dbutil.dir/src/MyLibrary.cpp.o CMakeFiles/dbutil.dir/src/MyConnection.cpp.o CMakeFiles/dbutil.dir/src/RedisCon.cpp.o CMakeFiles/dbutil.dir/src/MyResult.cpp.o
-/usr/bin/ranlib libdbutil.a

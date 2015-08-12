@@ -1,1 +1,0 @@
-/usr/bin/c++   -std=c++11    CMakeFiles/demo.dir/main.cpp.o  -o demo  -L/repo/StrongerTookie/C++/DB/build/lib  -L/usr/local/mysql/lib  -L/usr/local/redis/lib -rdynamic ../lib/libdbutil.a -lmysqlclient -lpthread -lm -ldl -lhiredis -Wl,-rpath,/repo/StrongerTookie/C++/DB/build/lib:/usr/local/mysql/lib:/usr/local/redis/lib 
