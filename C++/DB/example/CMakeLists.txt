@@ -15,6 +15,7 @@ link_libraries (
 	dbutil
 	${MYSQL_DL_LINK}
 	${REDIS_DL_LINK}
+	${LIBDL}
 )
 
 set (CMAKE_CXX_FLAGS -std=c++11)

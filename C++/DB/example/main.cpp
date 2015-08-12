@@ -1,9 +1,20 @@
 #include <iostream>
-#include "mysqlcommon.h"
-#include "rediscommon.h"
+
+#include "config.h"
+
+#ifdef USE_MYSQL
+#	include "mysqlcommon.h"
+#endif /* USE_MYSQL */
+
+#ifdef USE_REDIS
+#	include "rediscommon.h"
+#endif /* USE_REDIS */
 
 int main(int argc, char** argv)
 {
+	
+#ifdef USE_MYSQL
+	
 	/**
 	 * 初始化
 	 *
@@ -48,8 +59,11 @@ int main(int argc, char** argv)
 	
 	result = conn->query("DELETE FROM `table` WHERE `name`='test'");
 	if (result->isError()) std::cout << result->strError() << std::endl;
+
+#endif /* USE_MYSQL */
 	
-	
+#ifdef USE_REDIS
+
 	/**
 	 * REDIS连接
 	 *
@@ -68,6 +82,7 @@ int main(int argc, char** argv)
 	{
 		std::cout << "REDIS-RES-ERROR: " << buffer->strError() << std::endl;
 	}
-	
+#endif /* USE_REDIS */
+
 	return 0;
 }

@@ -18,7 +18,7 @@ include (${CMAKE_ROOT}/Modules/CheckIncludeFiles.cmake)
 include (${CMAKE_ROOT}/Modules/CheckLibraryExists.cmake)
 
 if (USE_MYSQL)
-	set (MYSQL_DL_LINK  mysqlclient pthread m dl)
+	set (MYSQL_DL_LINK  mysqlclient pthread m)
 	if (MYSQL_INC_DIR)
 		find_file (MYSQL_H mysql.h "${MYSQL_INC_DIR}")
 		if (${MYSQL_H} MATCHES "-NOTFOUND")
@@ -75,6 +75,10 @@ configure_file (
 	"${PROJECT_SOURCE_DIR}/config.h.in"
 	"${PROJECT_BINARY_DIR}/config.h"
 )
+find_library (DL_LIB dl)
+if (${DL_LIB} MATCHES "libdl")
+	set (LIBDL dl)
+endif (${DL_LIB} MATCHES "libdl")
 include_directories (${PROJECT_BINARY_DIR})
 
 add_subdirectory (classes lib)
