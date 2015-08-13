@@ -67,6 +67,11 @@ Redis::Result::Result(redisContext*& context, const char* format, va_list args)
 	, _reply ((redisReply *) redisvCommand(context, format, args))
 {
 }
+Redis::Result::Result(redisContext*& context, redisReply*& reply)
+	: _con (context)
+	, _reply (reply)
+{
+}
 Redis::Result::Result()
 	: _con (NULL)
 	, _reply (NULL)
@@ -111,3 +116,68 @@ std::string Redis::Result::strError()
 	return _reply->str;
 }
 
+bool Redis::Result::isNil()
+{
+	if (_reply == NULL)
+	{
+		return false;
+	}
+	return (_reply->type == REDIS_REPLY_NIL);
+}
+
+bool Redis::Result::isInteger()
+{
+	if (_reply == NULL)
+	{
+		return false;
+	}
+	return (_reply->type == REDIS_REPLY_INTEGER);
+}
+
+bool Redis::Result::isString()
+{
+	if (_reply == NULL)
+	{
+		return false;
+	}
+	return (_reply->type == REDIS_REPLY_STRING);
+}
+
+bool Redis::Result::isArray()
+{
+	if (_reply == NULL)
+	{
+		return false;
+	}
+	return (_reply->type == REDIS_REPLY_ARRAY);
+}
+
+bool Redis::Result::isStatus()
+{
+	if (_reply == NULL)
+	{
+		return false;
+	}
+	return (_reply->type == REDIS_REPLY_STATUS);
+}
+
+long long Redis::Result::getInteger()
+{
+	return _reply->integer;
+}
+std::string Redis::Result::getString()
+{
+	return _reply->str;
+}
+size_t Redis::Result::getArraySize()
+{
+	return _reply->elements;
+}
+std::shared_ptr<Redis::Result> Redis::Result::getArrayItem(size_t index)
+{
+	if (index > _reply->elements)
+	{
+		return std::make_shared<Redis::Result>();
+	}
+	return std::make_shared<Redis::Result>(_con, _reply->element[index]);
+}

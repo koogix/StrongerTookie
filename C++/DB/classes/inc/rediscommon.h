@@ -35,11 +35,21 @@ public:
 	{
 	public:
 		Result(redisContext*& context, const char* format, va_list args);
+		Result(redisContext*& context, redisReply*& reply);
 		Result();
 		virtual ~Result();
 		bool isEmpty();
 		bool isError();
 		std::string strError();
+		bool isNil();
+		bool isInteger();
+		bool isString();
+		bool isArray();
+		bool isStatus();
+		long long getInteger();
+		std::string getString();
+		size_t getArraySize();
+		std::shared_ptr<Result> getArrayItem(size_t index);
 	private:
 		redisReply * _reply;
 		redisContext * _con;

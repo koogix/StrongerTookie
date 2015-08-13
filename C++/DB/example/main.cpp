@@ -82,6 +82,12 @@ int main(int argc, char** argv)
 	{
 		std::cout << "REDIS-RES-ERROR: " << buffer->strError() << std::endl;
 	}
+	buffer = redcon->command("DEL uuid");
+	buffer = redcon->command("SETNX uuid 12345");
+	std::cout << "SETNX RESULT 001: " << buffer->getInteger() << std::endl;
+	buffer = redcon->command("SETNX uuid 67890");
+	std::cout << "SETNX RESULT 002: " << buffer->getInteger() << std::endl;
+	
 #endif /* USE_REDIS */
 
 	return 0;
