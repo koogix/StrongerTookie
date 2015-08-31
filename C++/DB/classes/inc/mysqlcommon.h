@@ -211,10 +211,22 @@ public:
 	std::string strError();
 	
 	/**
+	 * 执行方法
+	 *
+	 */
+	bool exec(std::string sql);
+	
+	/**
 	 * 查询方法
 	 *
 	 */
 	std::shared_ptr<Result> query(std::string sql);
+	
+	/**
+	 * 最后新增的id
+	 *
+	 */
+	int insertid();
 	
 private:
 	MYSQL * _connection;

@@ -46,13 +46,36 @@ public:
 		public:
 			class Row
 			{
-				
+			public:
+				Row(std::shared_ptr<Result> res, std::unordered_map<std::string, std::string> data);
+				Row(std::shared_ptr<Result> res);
+				virtual ~Row();
+				operator bool() const;
+				Row& operator++ ();
+				std::string operator[] (unsigned int index);
+				std::string operator[] (const char* name);
+				std::string field(unsigned int index);
+				std::string field(std::string name);
+				bool isEmpty();
+			private:
+				std::unordered_map<std::string, std::string> _map;
+				std::shared_ptr<Result> _res;
 			};
+			friend Row;
 		public:
+			Result(std::shared_ptr<Connection> conn, std::string sql);
+			Result(std::shared_ptr<Connection> conn);
+			virtual ~Result();
+			bool isError();
+			std::string strError();
 			Row fetch();
 		private:
-			
+			int  _error_code;
+			sqlite3_stmt * _stmt;
+			std::shared_ptr<Connection> _conn;
+			std::unordered_map<unsigned int, std::string> _field_map;
 		};
+		friend Result;
 	public:
 		Connection(const char* filename);
 		virtual ~Connection();
@@ -81,6 +104,7 @@ public:
 		 *
 		 */
 		std::shared_ptr<Result> query(std::string sql);
+		
 	private:
 		int    _error_code;
 		char    * _message;

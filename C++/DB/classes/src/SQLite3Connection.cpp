@@ -39,7 +39,7 @@ std::string SQLiteFactory::Connection::strError()
 	}
 	return sqlite3_errmsg(_handler);
 }
-		
+
 /**
  * Ö´ÐÐ²Ù×÷
  *
@@ -55,11 +55,11 @@ bool SQLiteFactory::Connection::exec(std::string sql)
  */
 std::shared_ptr<SQLiteFactory::Connection::Result> SQLiteFactory::Connection::query(std::string sql)
 {
-	if (sqlite3_exec(_handler, sql.c_str(), NULL, NULL, &_message) != SQLITE_OK)
+	if (_error_code != SQLITE_OK)
 	{
-		return std::make_shared<SQLiteFactory::Connection::Result>();
+		return std::make_shared<SQLiteFactory::Connection::Result>(shared_from_this());
 	}
-	return std::make_shared<SQLiteFactory::Connection::Result>();
+	return std::make_shared<SQLiteFactory::Connection::Result>(shared_from_this(), sql);
 }
 
 

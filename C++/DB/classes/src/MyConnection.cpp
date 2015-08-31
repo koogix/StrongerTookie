@@ -169,9 +169,30 @@ bool Connection::isError()
  */
 std::string Connection::strError()
 {
+	if (_connection == NULL)
+	{
+		return std::string("NOT CONNECTED");
+	}
 	return mysql_error(_connection);
 }
+	
+/**
+ * 执行方法
+ *
+ */
+bool Connection::exec(std::string sql)
+{
+	if (_connection == NULL)
+	{
+		return false;
+	}
+	return (mysql_real_query(_connection, sql.c_str(), sql.size()) == 0);
+}
 
+/**
+ * 查询方法
+ *
+ */
 std::shared_ptr<Connection::Result> Connection::query(std::string sql)
 {
 	if (_connection == NULL || mysql_real_query(_connection, sql.c_str(), sql.size()))
@@ -179,5 +200,18 @@ std::shared_ptr<Connection::Result> Connection::query(std::string sql)
 		return std::make_shared<Connection::Result>(shared_from_this(), (MYSQL_RES *) NULL);
 	}
 	return std::make_shared<Connection::Result>(shared_from_this(), mysql_use_result(_connection));
+}
+
+/**
+ * 最后新增id
+ *
+ */
+int Connection::insertid()
+{
+	if (_connection == NULL)
+	{
+		return 0;
+	}
+	return mysql_insert_id(_connection);
 }
 

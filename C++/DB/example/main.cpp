@@ -23,15 +23,23 @@ int main(int argc, char** argv)
 	{
 		std::cout << sqlite->strError() << std::endl;
 	}
-	else
-	{
-		std::cout << "sqlite3 connected!" << std::endl;
-	}
-	if (sqlite->query("create table if not exists [user] ([name] text, [password] text)") == false)
+	if (sqlite->exec("create table if not exists [user] ([id] integer primary key, [name] text, [password] text)") == false)
 	{
 		std::cout << sqlite->strError() << std::endl;
 	}
-	DBLITE_RES_T_PTR liteResult = sqlite->query("create table if not exists [user] ([name] text, [password] text)");
+	if (sqlite->exec("insert into [user] ([name], [password]) values (\"aa\", \"123456\")") == false)
+	{
+		std::cout << sqlite->strError() << std::endl;
+	}
+	if (sqlite->exec("insert into [user] ([name], [password]) values (\"bb\", \"123456\")") == false)
+	{
+		std::cout << sqlite->strError() << std::endl;
+	}
+	DBLITE_RES_T_PTR liteResult = sqlite->query("select * from [user]");
+	while (DBLITE_ROW_T liteRow = liteResult->fetch())
+	{
+		std::cout << liteRow["name"] << " : " << liteRow["password"] << std::endl;
+	}
 	
 #endif /* USE_SQLITE3 */
 
@@ -73,15 +81,23 @@ int main(int argc, char** argv)
 	 * insert / update / delete
 	 *
 	 */
-	result = conn->query("INSERT INTO `table`(`name`, `passwd`) VALUE ('test', 'test')");
-	if (result->isError()) std::cout << result->strError() << std::endl;
+	if (! conn->exec("INSERT INTO `table`(`name`, `passwd`) VALUE ('test', 'test')"))
+	{
+		std::cout << result->strError() << std::endl;
+	}
+	else
+	{
+		std::cout << "new record id: " << conn->insertid() << std::endl;
+	}
+	if (! conn->exec("UPDATE `table` SET `passwd`='password' WHERE `name`='test'"))
+	{
+		std::cout << result->strError() << std::endl;
+	}
+	if (! conn->exec("DELETE FROM `table` WHERE `name`='test'"))
+	{
+		std::cout << result->strError() << std::endl;
+	}
 	
-	result = conn->query("UPDATE `table` SET `passwd`='password' WHERE `name`='test'");
-	if (result->isError()) std::cout << result->strError() << std::endl;
-	
-	result = conn->query("DELETE FROM `table` WHERE `name`='test'");
-	if (result->isError()) std::cout << result->strError() << std::endl;
-
 #endif /* USE_MYSQL */
 	
 #ifdef USE_REDIS
