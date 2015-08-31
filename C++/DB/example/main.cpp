@@ -2,6 +2,10 @@
 
 #include "config.h"
 
+#ifdef USE_SQLITE3
+#	include "sqlite3common.h"
+#endif /* USE_SQLITE3 */
+
 #ifdef USE_MYSQL
 #	include "mysqlcommon.h"
 #endif /* USE_MYSQL */
@@ -12,7 +16,25 @@
 
 int main(int argc, char** argv)
 {
+#ifdef USE_SQLITE3
 	
+	DBLITE_CON_T_PTR sqlite = koogix::db::SQLiteFactory::getConnection();
+	if (sqlite->isError())
+	{
+		std::cout << sqlite->strError() << std::endl;
+	}
+	else
+	{
+		std::cout << "sqlite3 connected!" << std::endl;
+	}
+	if (sqlite->query("create table if not exists [user] ([name] text, [password] text)") == false)
+	{
+		std::cout << sqlite->strError() << std::endl;
+	}
+	DBLITE_RES_T_PTR liteResult = sqlite->query("create table if not exists [user] ([name] text, [password] text)");
+	
+#endif /* USE_SQLITE3 */
+
 #ifdef USE_MYSQL
 	
 	/**

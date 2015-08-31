@@ -1,6 +1,13 @@
+#ifndef __CONFIG_H__
+#define __CONFIG_H__
+
+/* use mysql */
+#cmakedefine USE_SQLITE3
+
 /* use mysql */
 #cmakedefine USE_MYSQL
 
 /* use redis */
 #cmakedefine USE_REDIS
 
+#endif /* __CONFIG_H__ */
