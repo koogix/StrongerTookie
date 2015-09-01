@@ -28,15 +28,15 @@ namespace koogix {
 namespace db {
 /* ~ db-BEGIN ~ */
 
-class Redis : public std::shared_ptr<Redis>
+class Redis : public std::enable_shared_from_this<Redis>
 {
 public:
-	class Result : public std::shared_ptr<Redis>
+	class Result : public std::enable_shared_from_this<Result>
 	{
 	public:
-		Result(redisContext*& context, const char* format, va_list args);
-		Result(redisContext*& context, redisReply*& reply);
-		Result();
+		Result(std::shared_ptr<Redis> redis, const char* format, va_list args);
+		Result(std::shared_ptr<Redis> redis, redisReply* reply);
+		Result(std::shared_ptr<Redis> redis);
 		virtual ~Result();
 		bool isEmpty();
 		bool isError();
@@ -52,7 +52,7 @@ public:
 		std::shared_ptr<Result> getArrayItem(size_t index);
 	private:
 		redisReply * _reply;
-		redisContext * _con;
+		std::shared_ptr<Redis> _redis;
 	};
 	friend Result;
 public:

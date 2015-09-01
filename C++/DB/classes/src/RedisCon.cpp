@@ -21,7 +21,7 @@ Redis::Redis(std::string host, unsigned int port, unsigned int database, std::st
 		{
 			command("SELECT %d", database);
 		}
-	}
+	}//~ connect and select redis DB !!!
 }
 
 Redis::~Redis()
@@ -34,19 +34,23 @@ Redis::~Redis()
 
 std::shared_ptr<Redis::Result> Redis::command(std::string format, ...)
 {
-	if (_context == NULL)
+	if (_context == NULL || _context->err)
 	{
-		return std::make_shared<Redis::Result>();
+		return std::make_shared<Redis::Result>(shared_from_this());
 	}
 	va_list args;
 	va_start(args, format);
 	va_end(args);
-	return std::make_shared<Redis::Result>(_context, format.c_str(), args);
+	return std::make_shared<Redis::Result>(shared_from_this(), format.c_str(), args);
 }
 
 bool Redis::isError()
 {
-	if (_context != NULL && _context->err)
+	if (_context == NULL)
+	{
+		return true;
+	}
+	if (_context->err)
 	{
 		return true;
 	}
@@ -59,22 +63,26 @@ std::string Redis::strError()
 	{
 		return std::string();
 	}
+	if (_context == NULL)
+	{
+		return std::string("REDIS NO CONNECT");
+	}
 	return _context->errstr;
 }
 
-Redis::Result::Result(redisContext*& context, const char* format, va_list args)
-	: _con (context)
-	, _reply ((redisReply *) redisvCommand(context, format, args))
+Redis::Result::Result(std::shared_ptr<Redis> redis, const char* format, va_list args)
+	: _reply ((redisReply *) redisvCommand(redis->_context, format, args))
+	, _redis (std::ref(redis))
 {
 }
-Redis::Result::Result(redisContext*& context, redisReply*& reply)
-	: _con (context)
-	, _reply (reply)
+Redis::Result::Result(std::shared_ptr<Redis> redis, redisReply* reply)
+	: _reply (reply)
+	, _redis (std::ref(redis))
 {
 }
-Redis::Result::Result()
-	: _con (NULL)
-	, _reply (NULL)
+Redis::Result::Result(std::shared_ptr<Redis> redis)
+	: _reply (NULL)
+	, _redis (std::ref(redis))
 {
 }
 Redis::Result::~Result()
@@ -98,7 +106,7 @@ bool Redis::Result::isError()
 {
 	if (_reply == NULL)
 	{
-		return (_con == NULL);
+		return (_redis->isError());
 	}
 	return (_reply->type == REDIS_REPLY_ERROR);
 }
@@ -111,7 +119,7 @@ std::string Redis::Result::strError()
 	}
 	if (_reply == NULL)
 	{
-		return _con->errstr;
+		return _redis->strError();
 	}
 	return _reply->str;
 }
@@ -163,21 +171,33 @@ bool Redis::Result::isStatus()
 
 long long Redis::Result::getInteger()
 {
+	if (isError())
+	{
+		return 0;
+	}
 	return _reply->integer;
 }
 std::string Redis::Result::getString()
 {
+	if (isError())
+	{
+		return std::string();
+	}
 	return _reply->str;
 }
 size_t Redis::Result::getArraySize()
 {
+	if (isError())
+	{
+		return 0;
+	}
 	return _reply->elements;
 }
 std::shared_ptr<Redis::Result> Redis::Result::getArrayItem(size_t index)
 {
-	if (index > _reply->elements)
+	if (isError() || index > _reply->elements)
 	{
-		return std::make_shared<Redis::Result>();
+		return std::make_shared<Redis::Result>(_redis);
 	}
-	return std::make_shared<Redis::Result>(_con, _reply->element[index]);
+	return std::make_shared<Redis::Result>(_redis, _reply->element[index]);
 }

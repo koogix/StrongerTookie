@@ -18,7 +18,7 @@ SQLiteFactory::Connection::~Connection()
 }
 
 /**
- * ÊÇ·ñÓĞ´íÎó
+ * æ˜¯å¦æœ‰é”™è¯¯
  *
  */
 bool SQLiteFactory::Connection::isError()
@@ -27,9 +27,9 @@ bool SQLiteFactory::Connection::isError()
 }
 
 /**
- * ÏÔÊ¾´íÎóĞÅÏ¢
+ * æ˜¾ç¤ºé”™è¯¯ä¿¡æ¯
  *
- * @return std::string   ´íÎóÌáÊ¾ĞÅÏ¢
+ * @return std::string   é”™è¯¯æç¤ºä¿¡æ¯
  */
 std::string SQLiteFactory::Connection::strError()
 {
@@ -41,24 +41,38 @@ std::string SQLiteFactory::Connection::strError()
 }
 
 /**
- * Ö´ĞĞ²Ù×÷
+ * æ‰§è¡Œæ“ä½œ
  *
  */
-bool SQLiteFactory::Connection::exec(std::string sql)
+bool SQLiteFactory::Connection::exec(const char* format, ...)
 {
+	std::string sql;
+	va_list args;
+	va_start(args, format);
+	int len = vsnprintf(NULL, 0, format, args);
+	sql.resize(++len);
+	vsnprintf((char *)sql.data(), len, format, args);
+	va_end(args);
 	return (sqlite3_exec(_handler, sql.c_str(), NULL, NULL, &_message) == SQLITE_OK);
 }
 
 /**
- * ²éÑ¯·½·¨
+ * æŸ¥è¯¢æ–¹æ³•
  *
  */
-std::shared_ptr<SQLiteFactory::Connection::Result> SQLiteFactory::Connection::query(std::string sql)
+std::shared_ptr<SQLiteFactory::Connection::Result> SQLiteFactory::Connection::query(const char* format, ...)
 {
 	if (_error_code != SQLITE_OK)
 	{
 		return std::make_shared<SQLiteFactory::Connection::Result>(shared_from_this());
 	}
+	std::string sql;
+	va_list args;
+	va_start(args, format);
+	int len = vsnprintf(NULL, 0, format, args);
+	sql.resize(++len);
+	vsnprintf((char *)sql.data(), len, format, args);
+	va_end(args);
 	return std::make_shared<SQLiteFactory::Connection::Result>(shared_from_this(), sql);
 }
 

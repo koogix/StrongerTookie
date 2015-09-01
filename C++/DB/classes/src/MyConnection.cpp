@@ -155,7 +155,7 @@ bool Connection::connect(std::string unix_socket, std::string user, std::string 
 }
 
 /**
- * ÊÇ·ñÓĞ´íÎó·¢Éú
+ * æ˜¯å¦æœ‰é”™è¯¯å‘ç”Ÿ
  *
  */
 bool Connection::isError()
@@ -164,7 +164,7 @@ bool Connection::isError()
 }
 
 /**
- * ´íÎóÌáÊ¾ĞÅÏ¢
+ * é”™è¯¯æç¤ºä¿¡æ¯
  *
  */
 std::string Connection::strError()
@@ -177,24 +177,38 @@ std::string Connection::strError()
 }
 	
 /**
- * Ö´ĞĞ·½·¨
+ * æ‰§è¡Œæ–¹æ³•
  *
  */
-bool Connection::exec(std::string sql)
+bool Connection::exec(const char* format, ...)
 {
 	if (_connection == NULL)
 	{
 		return false;
 	}
+	std::string sql;
+	va_list args;
+	va_start(args, format);
+	int len = vsnprintf(NULL, 0, format, args);
+	sql.resize(++len);
+	vsnprintf((char *)sql.data(), len, format, args);
+	va_end(args);
 	return (mysql_real_query(_connection, sql.c_str(), sql.size()) == 0);
 }
 
 /**
- * ²éÑ¯·½·¨
+ * æŸ¥è¯¢æ–¹æ³•
  *
  */
-std::shared_ptr<Connection::Result> Connection::query(std::string sql)
+std::shared_ptr<Connection::Result> Connection::query(const char* format, ...)
 {
+	std::string sql;
+	va_list args;
+	va_start(args, format);
+	int len = vsnprintf(NULL, 0, format, args);
+	sql.resize(++len);
+	vsnprintf((char *)sql.data(), len, format, args);
+	va_end(args);
 	if (_connection == NULL || mysql_real_query(_connection, sql.c_str(), sql.size()))
 	{
 		return std::make_shared<Connection::Result>(shared_from_this(), (MYSQL_RES *) NULL);
@@ -203,7 +217,7 @@ std::shared_ptr<Connection::Result> Connection::query(std::string sql)
 }
 
 /**
- * ×îºóĞÂÔöid
+ * æœ€åæ–°å¢id
  *
  */
 int Connection::insertid()

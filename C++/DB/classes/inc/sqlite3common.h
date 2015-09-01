@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <cstdarg>
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,7 +31,7 @@ namespace db {
 
 
 /**
- * SQLite3 Êı¾İ¿â²Ù×÷
+ * SQLite3 æ•°æ®åº“æ“ä½œ
  *
  *
  *
@@ -81,29 +82,29 @@ public:
 		virtual ~Connection();
 		
 		/**
-		 * ÊÇ·ñÓĞ´íÎó
+		 * æ˜¯å¦æœ‰é”™è¯¯
 		 *
 		 */
 		bool isError();
 		
 		/**
-		 * ÏÔÊ¾´íÎóĞÅÏ¢
+		 * æ˜¾ç¤ºé”™è¯¯ä¿¡æ¯
 		 *
-		 * @return std::string   ´íÎóÌáÊ¾ĞÅÏ¢
+		 * @return std::string   é”™è¯¯æç¤ºä¿¡æ¯
 		 */
 		std::string strError();
 		
 		/**
-		 * Ö´ĞĞ²Ù×÷
+		 * æ‰§è¡Œæ“ä½œ
 		 *
 		 */
-		bool exec(std::string sql);
+		bool exec(const char* format, ...);
 	
 		/**
-		 * ²éÑ¯·½·¨
+		 * æŸ¥è¯¢æ–¹æ³•
 		 *
 		 */
-		std::shared_ptr<Result> query(std::string sql);
+		std::shared_ptr<Result> query(const char* format, ...);
 		
 	private:
 		int    _error_code;
