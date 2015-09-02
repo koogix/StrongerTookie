@@ -106,6 +106,12 @@ public:
 		 */
 		std::shared_ptr<Result> query(const char* format, ...);
 		
+		/**
+		 * 最后新增的ID
+		 *
+		 */
+		int insertid();
+		
 	private:
 		int    _error_code;
 		char    * _message;

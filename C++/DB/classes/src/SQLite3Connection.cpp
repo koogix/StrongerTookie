@@ -76,4 +76,16 @@ std::shared_ptr<SQLiteFactory::Connection::Result> SQLiteFactory::Connection::qu
 	return std::make_shared<SQLiteFactory::Connection::Result>(shared_from_this(), sql);
 }
 
+/**
+ * 最后新增ID值
+ *
+ */
+int SQLiteFactory::Connection::insertid()
+{
+	if(isError() || _handler == NULL)
+	{
+		return 0;
+	}
+	return sqlite3_last_insert_rowid(_handler);
+}
 
