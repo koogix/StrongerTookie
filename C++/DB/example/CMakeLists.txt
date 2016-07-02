@@ -13,6 +13,7 @@ link_directories (
  )
 link_libraries (
 	dbutil
+	${SQLITE3_DL_LINK}
 	${MYSQL_DL_LINK}
 	${REDIS_DL_LINK}
 	${LIBDL}

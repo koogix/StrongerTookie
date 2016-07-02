@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <cstdarg>
 
 #ifdef __cplusplus
 extern "C" {
@@ -211,10 +212,22 @@ public:
 	std::string strError();
 	
 	/**
+	 * 执行方法
+	 *
+	 */
+	bool exec(const char* format, ...);
+	
+	/**
 	 * 查询方法
 	 *
 	 */
-	std::shared_ptr<Result> query(std::string sql);
+	std::shared_ptr<Result> query(const char* format, ...);
+	
+	/**
+	 * 最后新增的id
+	 *
+	 */
+	int insertid();
 	
 private:
 	MYSQL * _connection;
