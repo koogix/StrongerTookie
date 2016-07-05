@@ -66,7 +66,7 @@
 			{
 				if ($i % 8 == 0)
 				{
-					printf(PHP_EOL);
+					printf("%s%4d\t", PHP_EOL, floor($i/8) + 1);
 				}
 				printf("%02X ", ord($this->databuf[$i]));
 			}
