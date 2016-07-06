@@ -49,6 +49,8 @@
 		const OPCODE_CLOSE   = 8;		// 断开
 		const OPCODE_PING    = 9;		// PING
 		const OPCODE_PONG    = 10;		// PONG
+		// ~  3-7 用来表示未来的非控制帧
+		// ~  B-F 用于表示未来的控制帧
 
 		// ~ 掩码位
 		const MASK_BIT = 0x80;
@@ -60,6 +62,12 @@
 			$datalen = strlen($data);
 			if ($datalen < 2)
 			{
+				return false;
+			}
+			$opcode = (int) (ord($data[0]) & 0x0F);
+			if (  ($opcode >= 0x03 && $opcode <= 0x07)
+			   || ($opcode >= 0x0B && $opcode <= 0x0F)
+			) {
 				return false;
 			}
 			$len = (int) (ord($data[1]) & 0x7F);
@@ -90,12 +98,12 @@
 			}
 			$options = array
 			(
-				'isClose'  => ($data[0] & self::OPCODE_CLOSE)  == self::OPCODE_CLOSE,
-		 		'isPing'   => ($data[0] & self::OPCODE_PING)   == self::OPCODE_PING,
-		 		'isPong'   => ($data[0] & self::OPCODE_PONG)   == self::OPCODE_PONG,
-				'isText'   => ($data[0] & self::OPCODE_TEXT)   == self::OPCODE_TEXT,
-				'isBinary' => ($data[0] & self::OPCODE_BINARY) == self::OPCODE_BINARY,
-				'isMasked' => ($data[1] & self::MASK_BIT) == self::MASK_BIT,
+				'isClose'  => (ord($data[0]) & self::OPCODE_CLOSE)  == self::OPCODE_CLOSE,
+		 		'isPing'   => (ord($data[0]) & self::OPCODE_PING)   == self::OPCODE_PING,
+		 		'isPong'   => (ord($data[0]) & self::OPCODE_PONG)   == self::OPCODE_PONG,
+				'isText'   => (ord($data[0]) & self::OPCODE_TEXT)   == self::OPCODE_TEXT,
+				'isBinary' => (ord($data[0]) & self::OPCODE_BINARY) == self::OPCODE_BINARY,
+				'isMasked' => (ord($data[1]) & self::MASK_BIT) == self::MASK_BIT,
 				'length'   => $length,
 				'maskcode' => array()
 			);
@@ -122,7 +130,10 @@
 			}
 			$len = strlen($output);
 			$buf = array();
-			for ($i = 0; $i < $len; $i++)
+
+			/* chrome 浏览器中，服务器往客户端发送数据不能使用mask位，否则报错 */
+			/* A server must not mask any frames that it sends to the client. */
+/*			for ($i = 0; $i < $len; $i++)
 			{
 				if ($isBinary)
 				{
@@ -137,6 +148,8 @@
 			{
 				array_unshift($buf, chr($mask[$i]));
 			}
+*/			$buf[] = $output;  // ~ 不加 mask 位处理数据，不需要按位去处理
+
 			if ($len > 65535)
 			{
 				array_unshift($buf, chr( $len & 0x00000000000000FF));
@@ -147,18 +160,20 @@
 				array_unshift($buf, chr(($len & 0x0000FF0000000000) >> 40));
 				array_unshift($buf, chr(($len & 0x00FF000000000000) >> 48));
 				array_unshift($buf, chr(($len & 0xFF00000000000000) >> 56));
-				array_unshift($buf, chr(0xFF));	// 0x80 | 0x7F
+				// ~ array_unshift($buf, chr(0xFF));	// 0x80 | 0x7F
+				array_unshift($buf, chr(0x7F));			// ~ 无MASK位
 			}
 			else if ($len > 127)
 			{
 				array_unshift($buf, chr( $len & 0x000000FF));
 				array_unshift($buf, chr(($len & 0x0000FF00) >>  8));
-				array_unshift($buf, chr(($len & 0x00FF0000) >> 16));
-				array_unshift($buf, chr(0xFE));	// 0x80 | 0x7E
+				// ~ array_unshift($buf, chr(0xFE));	// 0x80 | 0x7E
+				array_unshift($buf, chr(0x7E));			// ~ 无MASK位
 			}
 			else
 			{
-				array_unshift($buf, chr(self::MASK_BIT | $len));
+				// ~ array_unshift($buf, chr(self::MASK_BIT | $len));
+				array_unshift($buf, chr($len));			// ~ 无MASK位
 			}
 			if ($opcode === false)
 			{

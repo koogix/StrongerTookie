@@ -55,8 +55,15 @@
 				return false;
 			}
 			$this->options = array();
-			$data = DataFrame::unpack($strmbuf->data(), $this->options);
-			if ($data == 'PING')
+			$data = DataFrame::unpack(
+				$strmbuf->data(),
+				$this->options
+			);
+			if ($data === false)
+			{
+				return false;
+			}
+			else if ($data == 'PING')
 			{
 				$this->send('PONG');
 				return false;

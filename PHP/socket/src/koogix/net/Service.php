@@ -248,7 +248,6 @@
 				return Exception::display($this->socket);
 			}
 			$sessid = $this->genid($client);
-			// $this->connections[$sessid] = new Session($client, $sessid);
 			if ($this->sessionProvider == null)
 			{
 				$this->setProvider('koogix\net\Session');
